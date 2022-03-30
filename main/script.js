@@ -1,6 +1,5 @@
 const addValue = document.getElementById('send');
 const val = document.getElementById('description');
-const setValue = document.getElementsByClassName('lesson');
 let obj=[];
 
 
