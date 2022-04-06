@@ -1,12 +1,14 @@
 const addValue = document.getElementById('send');
 const val = document.getElementById('description');
+const del_items = document.querySelector('button');
 let obj=[];
+let date = new Date().toLocaleDateString(); 
 
+localStorage.task ? obj = JSON.parse(localStorage.getItem("task")) : obj=[];
 
-localStorage.task ? obj = JSON.parse(localStorage.getItem("task")) :obj=[];
-
-function Task(description){
+function Task(description,date){
     this.description = description;
+    this.date = date;
 }
 
 const updatelocal = ()=>{
@@ -15,12 +17,11 @@ const updatelocal = ()=>{
 }
 addValue.addEventListener('click',() =>{
     if(val.value == ''){
-        console.log("Пусто");
         document.getElementById('error').style.display = "inline";
     }
     else{
         document.getElementById('error').style.display = "none";
-        obj.push(new Task(val.value));
+        obj.push(new Task(val.value,date));
         updatelocal();
     }
 });
@@ -28,20 +29,45 @@ addValue.addEventListener('click',() =>{
 function set(){
     let newObj = JSON.parse(localStorage.getItem("task"));
     let newDiv = document.createElement("div");
-    newDiv.innerHTML = "<div class=\"item_inner alert alert-secondary position-relative\" role=\"alert\"> <p>"+newObj[newObj.length -1].description+"</p> <span class=\"badge bg-secondary obj_date float-end\">30.03.2022 </span> <button class=\"position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-2\">X</button> </div>";
+    newDiv.innerHTML = `<div class="item_inner alert alert-secondary position-relative" role="alert">
+                          <p>${newObj[newObj.length -1].description}</p> 
+                          <span class="badge bg-secondary obj_date float-end">${newObj[newObj.length -1].date} </span> 
+                          <button onclick="delItem()" class="position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-2">X</button>
+                        </div>`;
     document.getElementById("inner_obj").append(newDiv);
 }
 
 function addElement() {
    for(let i = 0; i<= obj.length -1;i++){ 
-       if(obj[i].description != ''){
+       if(obj[i] != null){
             let newDiv = document.createElement("div");
-            newDiv.innerHTML = "<div class=\"item_inner alert alert-secondary position-relative\" role=\"alert\"> <p>"+obj[i].description+"</p> <span class=\"badge bg-secondary obj_date float-end\">30.03.2022 </span> <button class=\"position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-2\">X</button> </div>";
+            newDiv.innerHTML = `<div class="item_inner alert alert-secondary position-relative" role="alert"> 
+                                  <p>${obj[i].description}</p> 
+                                  <span class="badge bg-secondary obj_date float-end">${obj[i].date}</span> 
+                                  <button onclick="delItem(${i})" class="position-absolute top-0 start-100 translate-middle badge border border-light rounded-circle bg-danger p-2">X</button> 
+                                </div>`;
             document.getElementById("inner_obj").append(newDiv);
        }
+
        else{
            continue
        }
     }   
   }
+  
+  for(let i = 0; i >=del_items.length; i++){
+    del_items[i].addEventListener('click',(e) =>{
+      console.log("Удалил");
+  });
+  }
+
 addElement();
+
+function delItem(el){
+ const objo = JSON.parse(localStorage.getItem("task"));
+ delete objo[el];
+ const ad = objo;
+
+ console.log(ad);
+ localStorage.setItem('task', JSON.stringify(ad));
+}
