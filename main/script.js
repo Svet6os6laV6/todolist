@@ -54,13 +54,6 @@ function addElement() {
        }
     }   
   }
-  
-  for(let i = 0; i >=del_items.length; i++){
-    del_items[i].addEventListener('click',(e) =>{
-      console.log("Удалил");
-  });
-  }
-
 addElement();
 
 function delItem(el){
